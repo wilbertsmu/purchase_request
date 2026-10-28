@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PURCHASE REQUEST TREE VIEW -->
+    <record id="view_purchase_request_tree" model="ir.ui.view">
+        <field name="name">purchase.request.tree</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Requests">
+                <field name="name"/>
+                <field name="requested_by_id"/>
+                <field name="department_id"/>
+                <field name="date_created"/>
+                <field name="supervising_vp_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- PURCHASE REQUEST FORM VIEW -->
+    <record id="view_purchase_request_form" model="ir.ui.view">
+        <field name="name">purchase.request.form</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Request">
+                <header>
+                    <button name="action_submit_to_office_head" string="Submit to Office Head" type="object" class="oe_highlight" data-hotkey="v"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="requested_by_id" readonly="1"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="date_created"/>
+                            <field name="supervising_vp_id"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="State purpose or project description here..."/>
+                    <notebook>
+                        <page string="Requested Items">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="estimated_cost"/>
+                                    <field name="category_id"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'approved'" decoration-info="state in ('draft', 'office_head', 'inventory_cert')" decoration-danger="state == 'rejected'"/>
+                                    
+                                    <!-- Action Buttons per line in Tree -->
+                                    <button name="action_office_head_approve" string="Approve (Head)" type="object" icon="fa-check" attrs="{'invisible': [('state', '!=', 'office_head')]}" groups="purchase_request.group_pr_office_head"/>
+                                    <button name="action_inventory_certify_needed" string="Certify Purchase" type="object" icon="fa-check-circle" attrs="{'invisible': [('state', '!=', 'inventory_cert')]}" groups="purchase_request.group_pr_inventory_specialist"/>
+                                    <button name="action_inventory_fulfill_from_stock" string="Fulfill from Stock" type="object" icon="fa-archive" attrs="{'invisible': [('state', '!=', 'inventory_cert')]}" groups="purchase_request.group_pr_inventory_specialist"/>
+                                    <button name="action_supervising_vp_approve" string="Endorse (VP)" type="object" icon="fa-thumbs-up" attrs="{'invisible': [('state', '!=', 'supervising_vp')]}" groups="purchase_request.group_pr_supervising_vp"/>
+                                    <button name="action_vpf_final_approve" string="Approve (VPF)" type="object" icon="fa-dollar" attrs="{'invisible': [('state', '!=', 'vpf_approval')]}" groups="purchase_request.group_pr_vpf"/>
+                                    <button name="action_reject" string="Reject" type="object" icon="fa-times" attrs="{'invisible': [('state', 'in', ('approved', 'rejected', 'in_po', 'delivered'))]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTIONS & MENUS -->
+    <record id="action_purchase_request" model="ir.actions.act_window">
+        <field name="name">Purchase Requests</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_purchase_request_root" name="Procurement &amp; PR" sequence="10"/>
+    <menuitem id="menu_purchase_request_sub" name="Purchase Requests" parent="menu_purchase_request_root" action="action_purchase_request" sequence="10"/>
+</odoo>

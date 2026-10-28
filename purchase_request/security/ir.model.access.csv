@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_request_staff,purchase.request.staff,model_purchase_request,group_pr_staff,1,1,1,1
+access_purchase_request_line_staff,purchase.request.line.staff,model_purchase_request_line,group_pr_staff,1,1,1,1
+access_purchase_request_head,purchase.request.head,model_purchase_request,group_pr_office_head,1,1,0,0
+access_purchase_request_line_head,purchase.request.line.head,model_purchase_request_line,group_pr_office_head,1,1,0,0
+access_purchase_request_line_specialist,purchase.request.line.specialist,model_purchase_request_line,group_pr_inventory_specialist,1,1,0,0
+access_purchase_request_line_vp,purchase.request.line.vp,model_purchase_request_line,group_pr_supervising_vp,1,1,0,0
+access_purchase_request_line_vpf,purchase.request.line.vpf,model_purchase_request_line,group_pr_vpf,1,1,0,0

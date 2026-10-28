@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_canvass_wizard_form" model="ir.ui.view">
+        <field name="name">purchase.canvass.wizard.form</field>
+        <field name="model">purchase.canvass.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Purchase Order from Approved Pool">
+                <sheet>
+                    <group>
+                        <field name="supplier_id" options="{'no_create': True}"/>
+                    </group>
+                    <separator string="Select Approved Items for this Supplier"/>
+                    <field name="line_ids" domain="[('state', '=', 'approved'), ('po_line_id', '=', False)]">
+                        <tree>
+                            <field name="request_id"/>
+                            <field name="product_id"/>
+                            <field name="product_qty"/>
+                            <field name="estimated_cost"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_generate_purchase_order" string="Generate Purchase Order" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purchase_canvass_wizard" model="ir.actions.act_window">
+        <field name="name">Canvass &amp; PO Consolidation</field>
+        <field name="res_model">purchase.canvass.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_canvass_wizard" name="Canvass &amp; PO Consolidation" parent="menu_purchase_request_root" action="action_purchase_canvass_wizard" sequence="20"/>
+</odoo>
